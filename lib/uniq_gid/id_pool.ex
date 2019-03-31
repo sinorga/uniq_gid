@@ -9,11 +9,13 @@ defmodule UniqGid.IdPool do
   use Bitwise
   alias UniqGid.SequenceStoreETS
 
+  defstruct seq_store: %SequenceStoreETS{}
+
   @timestamp_size 48
   @node_id_size 64
   @local_sequence_size 16
 
-  @spec init() :: {:ok, %{seq_store: %{max_num: integer()}}}
+  @spec init() :: {:ok, %{seq_store: SequenceStoreETS.t()}}
   def init() do
     {:ok, store} = SequenceStoreETS.init(1 <<< @local_sequence_size)
     {:ok, %{seq_store: store}}
@@ -26,6 +28,7 @@ defmodule UniqGid.IdPool do
   Your service needs to run worldwide and tolerate failures of individual hosts
   along with whole regions.
   """
+  @spec get_id(SequenceStoreETS.t()) :: {:ok, integer()}
   def get_id(%{seq_store: store}) do
     <<id::size(128)>> =
       <<get_timestamp()::size(@timestamp_size), get_node_id()::size(@node_id_size),
