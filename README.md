@@ -1,6 +1,21 @@
 # UniqGid
 
-**TODO: Add description**
+Get 128 bits uniq id globally, you need to set the unique node id by yourself.
+
+Id structure is inspired by snowflake.
+48 bits: local timestamp
+64 bits: node id
+16 bits: local sequence number
+
+## Usage
+
+```elixir
+# Init service with node id: `1`
+{:ok, service} = UniqGid.init(1)
+
+# Get unique ID.
+{:ok, 1878707525583327798504100657962876931} = UniqGid.get_id(service)
+```
 
 ## Installation
 
