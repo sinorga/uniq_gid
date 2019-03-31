@@ -3,7 +3,7 @@ defmodule UniqGidTest do
   use Bitwise
 
   setup %{} do
-    {:ok, pool} = UniqGid.init()
+    {:ok, pool} = UniqGid.init(1)
     {:ok, pool: pool}
   end
 
