@@ -7,10 +7,17 @@ defmodule UniqGid.IdPool do
   """
 
   use Bitwise
+  alias UniqGid.SequenceStore
 
   @timestamp_size 48
   @node_id_size 64
   @local_sequence_size 16
+
+  @spec init() :: {:ok, %{seq_store: %{max_num: integer()}}}
+  def init() do
+    {:ok, store} = SequenceStore.init(1 <<< @local_sequence_size)
+    {:ok, %{seq_store: store}}
+  end
 
   @doc """
   To get globally unique numeric ids.
@@ -19,11 +26,10 @@ defmodule UniqGid.IdPool do
   Your service needs to run worldwide and tolerate failures of individual hosts
   along with whole regions.
   """
-  @spec get_id() :: {:ok, non_neg_integer()}
-  def get_id do
+  def get_id(%{seq_store: store}) do
     <<id::size(128)>> =
       <<get_timestamp()::size(@timestamp_size), get_node_id()::size(@node_id_size),
-        get_sequence_num()::size(@local_sequence_size)>>
+        get_sequence_num(store)::size(@local_sequence_size)>>
 
     {:ok, id}
   end
@@ -32,8 +38,8 @@ defmodule UniqGid.IdPool do
     :os.system_time(:millisecond)
   end
 
-  defp get_sequence_num do
-    1
+  defp get_sequence_num(store) do
+    SequenceStore.next_seq(store)
   end
 
   defp get_node_id do

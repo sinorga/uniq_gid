@@ -3,5 +3,6 @@ defmodule UniqGid do
   Documentation for UniqGid.
   """
   alias UniqGid.IdPool
-  defdelegate get_id, to: IdPool
+  defdelegate init, to: IdPool
+  defdelegate get_id(pool), to: IdPool
 end
