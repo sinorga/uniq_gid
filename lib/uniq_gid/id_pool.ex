@@ -7,7 +7,7 @@ defmodule UniqGid.IdPool do
   """
 
   use Bitwise
-  alias UniqGid.SequenceStore
+  alias UniqGid.SequenceStoreETS
 
   @timestamp_size 48
   @node_id_size 64
@@ -15,7 +15,7 @@ defmodule UniqGid.IdPool do
 
   @spec init() :: {:ok, %{seq_store: %{max_num: integer()}}}
   def init() do
-    {:ok, store} = SequenceStore.init(1 <<< @local_sequence_size)
+    {:ok, store} = SequenceStoreETS.init(1 <<< @local_sequence_size)
     {:ok, %{seq_store: store}}
   end
 
@@ -39,7 +39,7 @@ defmodule UniqGid.IdPool do
   end
 
   defp get_sequence_num(store) do
-    SequenceStore.next_seq(store)
+    SequenceStoreETS.next_seq(store)
   end
 
   defp get_node_id do

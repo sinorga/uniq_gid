@@ -16,10 +16,10 @@ defmodule UniqGid.IdPoolTest do
 
   test 'get_id returns different values', %{pool: pool} do
     ids =
-      Enum.map(1..100, fn _ -> IdPool.get_id(pool) end)
+      Enum.map(1..1_000_000, fn _ -> IdPool.get_id(pool) end)
       |> Enum.map(fn {:ok, id} -> id end)
       |> Enum.uniq()
 
-    assert length(ids) === 100
+    assert length(ids) === 1_000_000
   end
 end
