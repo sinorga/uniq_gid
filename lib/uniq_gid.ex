@@ -2,17 +2,6 @@ defmodule UniqGid do
   @moduledoc """
   Documentation for UniqGid.
   """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> UniqGid.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  alias UniqGid.IdPool
+  defdelegate get_id, to: IdPool
 end
