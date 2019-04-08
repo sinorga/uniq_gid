@@ -3,9 +3,9 @@
 Get 128 bits uniq id globally, you need to set the unique node id by yourself.
 
 Id structure is inspired by snowflake.
-48 bits: local timestamp
+48 bits: millisecond timestamp, supports over 1000 years
 64 bits: node id
-16 bits: local sequence number
+16 bits: local sequence, supports up to 65M request/s per node.
 
 ## Usage
 
